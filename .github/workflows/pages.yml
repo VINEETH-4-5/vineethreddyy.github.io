@@ -25,15 +25,25 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: 'npm'
 
-      - name: Install deps
+      # Optional extra cache for npm's folder (speeds up first run too)
+      - name: Cache npm folder
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
+
+      - name: Install dependencies
         run: npm ci || npm install
 
-      - name: Build & Export (Next.js static)
-        run: |
-          npm run build
-          npm run export
-          touch out/.nojekyll
+      - name: Build (Next.js static export via output: export)
+        run: npm run build
+
+      - name: Add .nojekyll
+        run: touch out/.nojekyll
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

@@ -5,8 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "export": "next export",
-    "deploy:local": "npm run build && npm run export"
+    "deploy:local": "next build"   
   },
   "dependencies": {
     "next": "14.0.4",
